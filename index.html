@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artisanat Sénégalais - Boutique en ligne</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Custom CSS for elements that need more control */
+        .cart-panel {
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        .cart-panel.open {
+            transform: translateX(0);
+        }
+        .carousel-item {
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            position: absolute;
+            width: 100%;
+        }
+        .carousel-item.active {
+            opacity: 1;
+            position: relative;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        .category-card:hover .category-icon {
+            transform: scale(1.1);
+        }
+        .hamburger-menu {
+            transition: all 0.3s ease;
+        }
+        .hamburger-menu.open span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        .hamburger-menu.open span:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger-menu.open span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Header -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+            <!-- Logo -->
+            <div class="flex items-center">
+                <a href="#" class="text-2xl font-bold text-green-600 flex items-center">
+                    <span>LMC</span>
+                </a>
+            </div>
+
+            <!-- Cart and Mobile Menu Button -->
+            <div class="flex items-center space-x-4">
+                <!-- Mobile Search Button -->
+                <button id="mobile-search-btn" class="md:hidden text-gray-600 hover:text-green-600">
+                    <i class="fas fa-search"></i>
+                </button>
+                
+                <!-- Cart Button -->
+                <button id="cart-btn" class="relative text-gray-600 hover:text-green-600">
+                    <i class="fas fa-shopping-cart text-xl"></i>
+                    <span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                </button>
+                
+                <!-- Mobile Menu Button -->
+                <button id="hamburger-btn" class="md:hidden text-gray-600 hover:text-green-600 hamburger-menu">
+                    <span class="block w-6 h-0.5 bg-gray-600 mb-1.5 transition-all"></span>
+                    <span class="block w-6 h-0.5 bg-gray-600 mb-1.5 transition-all"></span>
+                    <span class="block w-6 h-0.5 bg-gray-600 transition-all"></span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Search - Hidden by default -->
+        <div id="mobile-search" class="md:hidden bg-white px-4 py-2 hidden">
+            <div class="relative">
+                <input type="text" placeholder="Rechercher..." 
+                       class="w-full py-2 px-4 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500">
+                <button class="absolute right-0 top-0 h-full px-4 text-gray-600 hover:text-green-600">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav id="main-nav" class="hidden md:block bg-green-600">
+            <div class="container mx-auto px-4">
+                <ul class="flex flex-col md:flex-row">
+                    <li><a href="mode.html" class="block py-3 px-4 text-white hover:bg-green-700 transition">Mode</a></li>
+                    <li><a href="cosmetiques.html" class="block py-3 px-4 text-white hover:bg-green-700 transition">Cosmetiques</a></li>
+                    <li><a href="electromenager.html" class="block py-3 px-4 text-white hover:bg-green-700 transition">Electromenager</a></li>
+                    <li><a href="apropos.html" class="block py-3 px-4 text-white hover:bg-green-700 transition">À propos</a></li>
+                    <li><a href="https://api.whatsapp.com/qr/FO6W3O3FTWCHA1?autoload=1&app_absent=0" class="block py-3 px-4 text-white hover:bg-green-700 transition">Contact</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Mobile Menu - Hidden by default -->
+    <div id="mobile-menu" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div class="bg-white h-full w-4/5 max-w-sm ml-auto p-4">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-green-600">Menu</h3>
+                <button id="close-mobile-menu" class="text-gray-600 hover:text-red-500">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            <ul class="space-y-2">
+                <li><a href="#" class="block py-2 px-4 text-gray-700 hover:bg-green-50 rounded">Accueil</a></li>
+                <li><a href="#" class="block py-2 px-4 text-gray-700 hover:bg-green-50 rounded">Artisanat</a></li>
+                <li><a href="#" class="block py-2 px-4 text-gray-700 hover:bg-green-50 rounded">Textiles</a></li>
+                <li><a href="#" class="block py-2 px-4 text-gray-700 hover:bg-green-50 rounded">Bijoux</a></li>
+                <li><a href="#" class="block py-2 px-4 text-gray-700 hover:bg-green-50 rounded">Décoration</a></li>
+                <li><a href="#" class="block py-2 px-4 text-gray-700 hover:bg-green-50 rounded">À propos</a></li>
+                <li><a href="#" class="block py-2 px-4 text-gray-700 hover:bg-green-50 rounded">Contact</a></li>
+            </ul>
+        </div>
+    </div>
+  <section class="bg-green-600 text-white text-center py-8 px-4">
+  <h1 class="text-3xl sm:text-4xl font-bold mb-2">Mbour dans ton panier</h1>
+  <p class="text-lg sm:text-xl mb-1">Yeksil ak jaam</p>
+    <p class="text-base sm:text-lg italic">Louma Mbour Connect</p>
+    </section>
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-6">
+
+        <!-- Categories -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold mb-6 text-gray-800">Nos Catégories</h2>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                <!-- Category 1 -->
+                <a href="mode.html" class="category-card bg-white rounded-lg shadow-md p-4 text-center hover:shadow-lg transition">
+                    <div class="category-icon mb-2 text-4xl text-green-600 transition">
+                        <i class="fas fa-tshirt"></i>
+                    </div>
+                    <h3 class="font-medium text-gray-800">Mode</h3>
+                </a>
+                
+                <!-- Category 2 -->
+                <a href="electromenager.html" class="category-card bg-white rounded-lg shadow-md p-4 text-center hover:shadow-lg transition">
+                    <div class="category-icon mb-2 text-4xl text-yellow-500 transition">
+                        <i class="fas fa-house"></i>
+                    </div>
+                    <h3 class="font-medium text-gray-800">Electromenager</h3>
+                </a>
+                
+                <!-- Category 3 -->
+                <a href="cosmetiques.html" class="category-card bg-white rounded-lg shadow-md p-4 text-center hover:shadow-lg transition">
+                    <div class="category-icon mb-2 text-4xl text-red-500 transition">
+                        <i class="fas fa-soap"></i>
+                    </div>
+                    <h3 class="font-medium text-gray-800">Cosmetiques</h3>
+                </a>
+                
+            </div>
+        </section>
+        <!-- Featured Products -->
+<section class="mb-12">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold text-gray-800">Articles de mode</h2>
+        <a href="mode.html" class="text-green-600 hover:text-green-800 font-medium">Voir tout <i class="fas fa-arrow-right ml-1"></i></a>
+    </div>
+    
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <!-- Product 1 -->
+        <div class="product-card bg-white rounded-lg shadow-md overflow-hidden transition duration-300">
+            <div class="relative">
+                <img src="oumaisha.jpg" alt="Oumaisha Maison Kalsoum" class="w-full h-48 object-cover">
+                <span class="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">Nouveau</span>
+            </div>
+            <div class="p-4">
+                <h3 class="font-bold text-gray-800 mb-1">Oumaisha Maison Kalsoum</h3>
+                <div class="flex justify-between items-center">
+                    <span class="text-green-600 font-bold">22 500 FCFA</span>
+                    <button class="add-to-cart text-gray-600 hover:text-green-600" data-id="1" data-name="Oumaisha Maison Kalsoum" data-price="22500">
+                        <i class="fas fa-cart-plus text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product 2 -->
+        <div class="product-card bg-white rounded-lg shadow-md overflow-hidden transition duration-300">
+            <div class="relative">
+                <img src="costume2pc.jpg" alt="Costume 2 pièces hommes" class="w-full h-48 object-cover">
+                <span class="absolute top-2 right-2 bg-yellow-500 text-white text-xs px-2 py-1 rounded-full">Promo</span>
+            </div>
+            <div class="p-4">
+                <h3 class="font-bold text-gray-800 mb-1">Costume 2 pièces hommes</h3>
+                <div class="flex justify-between items-center">
+                    <div>
+                        <span class="text-green-600 font-bold">80 000 FCFA</span>
+                        <span class="text-sm text-gray-500 line-through ml-2">90 000 FCFA</span>
+                    </div>
+                    <button class="add-to-cart text-gray-600 hover:text-green-600" data-id="2" data-name="Costume 2 pièces hommes" data-price="80000">
+                        <i class="fas fa-cart-plus text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product 3 -->
+        <div class="product-card bg-white rounded-lg shadow-md overflow-hidden transition duration-300">
+            <div class="relative">
+                <img src="chemiseblanche.jpg" alt="Chemise Blanche Saloum Shop" class="w-full h-48 object-cover">
+            </div>
+            <div class="p-4">
+                <h3 class="font-bold text-gray-800 mb-1">Chemise Blanche Saloum Shop</h3>
+                <div class="flex justify-between items-center">
+                    <span class="text-green-600 font-bold">15 000 FCFA</span>
+                    <button class="add-to-cart text-gray-600 hover:text-green-600" data-id="3" data-name="Chemise Blanche Saloum Shop" data-price="15000">
+                        <i class="fas fa-cart-plus text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product 4 -->
+        <div class="product-card bg-white rounded-lg shadow-md overflow-hidden transition duration-300">
+            <div class="relative">
+                <img src="tshirtblanc.jpg" alt="T-shirt blanc unique coton" class="w-full h-48 object-cover">
+                <span class="absolute top-2 right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">Populaire</span>
+            </div>
+            <div class="p-4">
+                <h3 class="font-bold text-gray-800 mb-1">T-shirt blanc unique coton</h3>
+                <div class="flex justify-between items-center">
+                    <span class="text-green-600 font-bold">5 000 FCFA</span>
+                    <button class="add-to-cart text-gray-600 hover:text-green-600" data-id="4" data-name="T-shirt blanc unique coton" data-price="5000">
+                        <i class="fas fa-cart-plus text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+        
+
+      <!-- Featured Products -->
+<section class="mb-12">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold text-gray-800">Articles d'electromenager</h2>
+        <a href="electromenager.html" class="text-green-600 hover:text-green-800 font-medium">Voir tout <i class="fas fa-arrow-right ml-1"></i></a>
+    </div>
+    
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <!-- Product 1 -->
+        <div class="product-card bg-white rounded-lg shadow-md overflow-hidden transition duration-300">
+            <div class="relative">
+                <img src="mixeursansfil.jpg" alt="Mixeur à main sans fil DECAKILA KMMX018G" class="w-full h-48 object-cover">
+                <span class="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">Nouveau</span>
+            </div>
+            <div class="p-4">
+                <h3 class="font-bold text-gray-800 mb-1">Mixeur sans fil DECAKILA</h3>
+                <p class="text-sm text-gray-600 mb-2">Capacité 300ml, 2 lames inox, USB, 1500mAh</p>
+                <div class="flex justify-between items-center">
+                    <span class="text-green-600 font-bold">10 600 FCFA</span>
+                    <button class="add-to-cart text-gray-600 hover:text-green-600" data-id="1" data-name="Mixeur sans fil DECAKILA" data-price="10600">
+                        <i class="fas fa-cart-plus text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product 2 -->
+        <div class="product-card bg-white rounded-lg shadow-md overflow-hidden transition duration-300">
+            <div class="relative">
+                <img src="cafetierefiltre.jpg" alt="Cafetière filtre DECAKILA 1,8L KECFO28B" class="w-full h-48 object-cover">
+                <span class="absolute top-2 right-2 bg-yellow-500 text-white text-xs px-2 py-1 rounded-full">Promo</span>
+            </div>
+            <div class="p-4">
+                <h3 class="font-bold text-gray-800 mb-1">Cafetière filtre DECAKILA</h3>
+                <p class="text-sm text-gray-600 mb-2">Capacité 1,8L, 900W, anti-goutte, maintien au chaud</p>
+                <div class="flex justify-between items-center">
+                    <span class="text-green-600 font-bold">15 500 FCFA</span>
+                    <span class="text-sm text-gray-500 line-through ml-2">24 900 FCFA</span>
+                    <button class="add-to-cart text-gray-600 hover:text-green-600" data-id="2" data-name="Cafetière filtre DECAKILA" data-price="15500">
+                        <i class="fas fa-cart-plus text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product 3 -->
+        <div class="product-card bg-white rounded-lg shadow-md overflow-hidden transition duration-300">
+            <div class="relative">
+                <img src="bouilloireelectrique.jpg" alt="Bouilloire électrique DECAKILA inox 1,8L" class="w-full h-48 object-cover">
+            </div>
+            <div class="p-4">
+                <h3 class="font-bold text-gray-800 mb-1">Bouilloire inox DECAKILA</h3>
+                <p class="text-sm text-gray-600 mb-2">Capacité 1,8L, 1500W, arrêt auto, inox</p>
+                <div class="flex justify-between items-center">
+                    <span class="text-green-600 font-bold">9 200 FCFA</span>
+                    <button class="add-to-cart text-gray-600 hover:text-green-600" data-id="3" data-name="Bouilloire DECAKILA" data-price="9200">
+                        <i class="fas fa-cart-plus text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product 4 -->
+        <div class="product-card bg-white rounded-lg shadow-md overflow-hidden transition duration-300">
+            <div class="relative">
+                <img src="minifour.jpg" alt="Mini four électrique KEEV010B 28L" class="w-full h-48 object-cover">
+                <span class="absolute top-2 right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">Populaire</span>
+            </div>
+            <div class="p-4">
+                <h3 class="font-bold text-gray-800 mb-1">Mini four électrique 28L</h3>
+                <p class="text-sm text-gray-600 mb-2">Mini four 28L – Modèle KEEV010B</p>
+                <div class="flex justify-between items-center">
+                    <span class="text-green-600 font-bold">55 500 FCFA</span>
+                    <button class="add-to-cart text-gray-600 hover:text-green-600" data-id="4" data-name="Mini four électrique 28L" data-price="55500">
+                        <i class="fas fa-cart-plus text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Featured Products -->
+<section class="mb-12">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold text-gray-800">Cosmetiques</h2>
+        <a href="cosmetiques.html" class="text-green-600 hover:text-green-800 font-medium">Voir tout <i class="fas fa-arrow-right ml-1"></i></a>
+    </div>
+    
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <!-- Produit 1 -->
+        <div class="product-card bg-white rounded-lg shadow-md overflow-hidden transition duration-300">
+            <div class="relative">
+                <img src="serumantitaches.jpg" alt="Sérum correcteur anti tâches MAYANA" class="w-full h-48 object-cover">
+                <span class="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">Nouveau</span>
+            </div>
+            <div class="p-4">
+                <h3 class="font-bold text-gray-800 mb-1">Sérum anti-tâches MAYANA</h3>
+                <p class="text-sm text-gray-600 mb-2">Corrige les tâches et unifie le teint</p>
+                <div class="flex justify-between items-center">
+                    <span class="text-green-600 font-bold">4 000 FCFA</span>
+                    <button class="add-to-cart text-gray-600 hover:text-green-600" data-id="1" data-name="Sérum anti-tâches MAYANA" data-price="4000">
+                        <i class="fas fa-cart-plus text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Produit 2 -->
+        <div class="product-card bg-white rounded-lg shadow-md overflow-hidden transition duration-300">
+            <div class="relative">
+                <img src="savonantiacne.jpg" alt="Savon anti acné MAYANA" class="w-full h-48 object-cover">
+                <span class="absolute top-2 right-2 bg-yellow-500 text-white text-xs px-2 py-1 rounded-full">Top Vente</span>
+            </div>
+            <div class="p-4">
+                <h3 class="font-bold text-gray-800 mb-1">Savon anti acné MAYANA</h3>
+                <p class="text-sm text-gray-600 mb-2">Purifie et traite les imperfections</p>
+                <div class="flex justify-between items-center">
+                    <span class="text-green-600 font-bold">1 500 FCFA</span>
+                    <button class="add-to-cart text-gray-600 hover:text-green-600" data-id="2" data-name="Savon anti acné MAYANA" data-price="1500">
+                        <i class="fas fa-cart-plus text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Produit 3 -->
+        <div class="product-card bg-white rounded-lg shadow-md overflow-hidden transition duration-300">
+            <div class="relative">
+                <img src="savonkarite.jpg" alt="Savon beurre de karité MAYANA" class="w-full h-48 object-cover">
+            </div>
+            <div class="p-4">
+                <h3 class="font-bold text-gray-800 mb-1">Savon karité MAYANA</h3>
+                <p class="text-sm text-gray-600 mb-2">Hydrate et nourrit la peau naturellement</p>
+                <div class="flex justify-between items-center">
+                    <span class="text-green-600 font-bold">1 500 FCFA</span>
+                    <button class="add-to-cart text-gray-600 hover:text-green-600" data-id="3" data-name="Savon karité MAYANA" data-price="1500">
+                        <i class="fas fa-cart-plus text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Produit 4 -->
+        <div class="product-card bg-white rounded-lg shadow-md overflow-hidden transition duration-300">
+            <div class="relative">
+                <img src="cremegommante.jpg" alt="Crème gommante visage et corps MAYANA" class="w-full h-48 object-cover">
+                <span class="absolute top-2 right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">Populaire</span>
+            </div>
+            <div class="p-4">
+                <h3 class="font-bold text-gray-800 mb-1">Crème gommante MAYANA</h3>
+                <p class="text-sm text-gray-600 mb-2">Exfolie en douceur visage et corps</p>
+                <div class="flex justify-between items-center">
+                    <span class="text-green-600 font-bold">4 000 FCFA</span>
+                    <button class="add-to-cart text-gray-600 hover:text-green-600" data-id="4" data-name="Crème gommante MAYANA" data-price="4000">
+                        <i class="fas fa-cart-plus text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+    </main>
+
+    <!-- WhatsApp Button -->
+    <div class="fixed bottom-6 right-6 z-40">
+        <a href="https://wa.me/221772952287" target="_blank" class="bg-green-500 hover:bg-green-600 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition">
+            <i class="fab fa-whatsapp text-2xl"></i>
+        </a>
+    </div>
+
+    <!-- Cart Panel -->
+    <div id="cart-panel" class="cart-panel fixed top-0 right-0 w-full sm:w-96 h-full bg-white shadow-lg z-50 overflow-y-auto">
+        <div class="p-4">
+            <div class="flex justify-between items-center mb-6 border-b pb-4">
+                <h3 class="text-xl font-bold text-gray-800">Votre Panier</h3>
+                <button id="close-cart" class="text-gray-600 hover:text-red-500">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            
+            <div id="cart-items" class="mb-4">
+                <!-- Cart items will be added here dynamically -->
+                <p id="empty-cart-message" class="text-center text-gray-500 py-8">Votre panier est vide</p>
+            </div>
+            
+            <div id="cart-summary" class="border-t pt-4 hidden">
+                <div class="flex justify-between mb-2">
+                    <span class="font-medium">Sous-total:</span>
+                    <span id="cart-subtotal" class="font-bold">0 FCFA</span>
+                </div>
+                <div class="flex justify-between mb-4">
+                    <span class="font-medium">Livraison:</span>
+                    <span id="cart-shipping" class="font-bold">A DETERMINER</span>
+                </div>
+                <div class="flex justify-between text-lg font-bold border-t pt-2">
+                    <span>Total:</span>
+                    <span id="cart-total">0 FCFA</span>
+                </div>
+                
+                <div class="mt-6">
+                    <button id="checkout-btn" class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-bold transition">
+                        Commander via WhatsApp
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Louma Mbour Connect</h3>
+                    <p class="text-gray-400">Promouvons l'entreprenariat local et soutenons les entreprises sénégalaises</p>
+                    <div class="flex space-x-4 mt-4">
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4">Liens Utiles</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Politique de retour</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Contact</a></li>
+                    </ul>
+                </div>
+                
+                
+                <div>
+                    <h4 class="font-bold mb-4">Contact</h4>
+                    <ul class="space-y-2">
+                        <li class="flex items-start">
+                            <i class="fas fa-map-marker-alt mt-1 mr-2 text-gray-400"></i>
+                            <span class="text-gray-400">Mbour,Senegal</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-phone-alt mr-2 text-gray-400"></i>
+                            <span class="text-gray-400">+221 77 295 22 87</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-envelope mr-2 text-gray-400"></i>
+                            <span class="text-gray-400">lmc@gmail.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400">
+                <p>&copy; 2025 Louma Mbour Connect. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+   <script>
+        // Mobile Menu Toggle
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const closeMobileMenu = document.getElementById('close-mobile-menu');
+        const mobileSearchBtn = document.getElementById('mobile-search-btn');
+        const mobileSearch = document.getElementById('mobile-search');
+
+        hamburgerBtn.addEventListener('click', () => {
+            hamburgerBtn.classList.toggle('open');
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        closeMobileMenu.addEventListener('click', () => {
+            hamburgerBtn.classList.remove('open');
+            mobileMenu.classList.add('hidden');
+        });
+
+        mobileSearchBtn.addEventListener('click', () => {
+            mobileSearch.classList.toggle('hidden');
+        });
+
+        // Cart Toggle
+        const cartBtn = document.getElementById('cart-btn');
+        const cartPanel = document.getElementById('cart-panel');
+        const closeCart = document.getElementById('close-cart');
+
+        cartBtn.addEventListener('click', () => {
+            cartPanel.classList.add('open');
+        });
+
+        closeCart.addEventListener('click', () => {
+            cartPanel.classList.remove('open');
+        });
+
+        // Carousel
+        const carouselItems = document.querySelectorAll('.carousel-item');
+        const carouselDots = document.querySelectorAll('.carousel-dot');
+        let currentIndex = 0;
+
+        function showSlide(index) {
+            carouselItems.forEach(item => item.classList.remove('active'));
+            carouselDots.forEach(dot => dot.classList.remove('bg-white', 'opacity-100'));
+            
+            carouselItems[index].classList.add('active');
+            carouselDots[index].classList.add('bg-white', 'opacity-100');
+            currentIndex = index;
+        }
+
+        carouselDots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                showSlide(parseInt(dot.dataset.index));
+            });
+        });
+
+        // Auto-rotate carousel
+        setInterval(() => {
+            let nextIndex = (currentIndex + 1) % carouselItems.length;
+            showSlide(nextIndex);
+        }, 5000);
+
+        // Cart functionality
+        const cartItemsContainer = document.getElementById('cart-items');
+        const emptyCartMessage = document.getElementById('empty-cart-message');
+        const cartSummary = document.getElementById('cart-summary');
+        const cartSubtotal = document.getElementById('cart-subtotal');
+        const cartTotal = document.getElementById('cart-total');
+        const cartCount = document.getElementById('cart-count');
+        const checkoutBtn = document.getElementById('checkout-btn');
+        
+        let cart = [];
+
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', () => {
+                const id = button.dataset.id;
+                const name = button.dataset.name;
+                const price = parseInt(button.dataset.price);
+                
+                // Add item to cart or increase quantity if already exists
+                const existingItem = cart.find(item => item.id === id);
+                if (existingItem) {
+                    existingItem.quantity += 1;
+                } else {
+                    cart.push({ id, name, price, quantity: 1 });
+                }
+                
+                updateCart();
+                cartPanel.classList.add('open');
+                
+                // Add animation to cart button
+                cartBtn.classList.add('animate-bounce');
+                setTimeout(() => {
+                    cartBtn.classList.remove('animate-bounce');
+                }, 1000);
+            });
+        });
+
+        function updateCart() {
+            // Update cart items display
+            cartItemsContainer.innerHTML = '';
+            
+            if (cart.length === 0) {
+                emptyCartMessage.classList.remove('hidden');
+                cartSummary.classList.add('hidden');
+                cartCount.textContent = '0';
+                return;
+            }
+            
+            emptyCartMessage.classList.add('hidden');
+            
+            let subtotal = 0;
+            
+            cart.forEach(item => {
+                subtotal += item.price * item.quantity;
+                
+                const cartItem = document.createElement('div');
+                cartItem.className = 'flex justify-between items-center py-4 border-b';
+                cartItem.innerHTML = `
+                    <div class="flex-1">
+                        <h4 class="font-medium">${item.name}</h4>
+                        <p class="text-green-600 font-bold">${item.price.toLocaleString()} FCFA</p>
+                    </div>
+                    <div class="flex items-center">
+                        <button class="decrease-quantity w-8 h-8 rounded-full border text-gray-600 hover:bg-gray-100" data-id="${item.id}">-</button>
+                        <span class="mx-2 w-8 text-center">${item.quantity}</span>
+                        <button class="increase-quantity w-8 h-8 rounded-full border text-gray-600 hover:bg-gray-100" data-id="${item.id}">+</button>
+                        <button class="remove-item ml-4 text-red-500 hover:text-red-700" data-id="${item.id}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                
+                cartItemsContainer.appendChild(cartItem);
+            });
+            
+            // Update summary
+            const shipping = subtotal > 50000 ? 0 : 3000;           
+            const total = subtotal; // Ne pas ajouter shipping
+
+            cartSubtotal.textContent = subtotal.toLocaleString() + ' FCFA';
+            // document.getElementById('cart-shipping').textContent = shipping.toLocaleString() + ' FCFA'; // On ne l'affiche plus
+            cartTotal.textContent = total.toLocaleString() + ' FCFA';
+
+            cartSummary.classList.remove('hidden');
+            cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+            
+            // Add event listeners to quantity buttons
+            document.querySelectorAll('.decrease-quantity').forEach(button => {
+                button.addEventListener('click', () => {
+                    const id = button.dataset.id;
+                    const item = cart.find(item => item.id === id);
+                    
+                    if (item.quantity > 1) {
+                        item.quantity -= 1;
+                    } else {
+                        cart = cart.filter(item => item.id !== id);
+                    }
+                    
+                    updateCart();
+                });
+            });
+            
+            document.querySelectorAll('.increase-quantity').forEach(button => {
+                button.addEventListener('click', () => {
+                    const id = button.dataset.id;
+                    const item = cart.find(item => item.id === id);
+                    item.quantity += 1;
+                    updateCart();
+                });
+            });
+            
+            document.querySelectorAll('.remove-item').forEach(button => {
+                button.addEventListener('click', () => {
+                    const id = button.dataset.id;
+                    cart = cart.filter(item => item.id !== id);
+                    updateCart();
+                });
+            });
+        }
+        
+        // Checkout button
+        checkoutBtn.addEventListener('click', () => {
+            if (cart.length === 0) return;
+            
+            let message = "Bonjour, je souhaite commander les articles suivants:\n\n";
+            
+            cart.forEach(item => {
+                message += `- ${item.name} (${item.quantity}x ${item.price.toLocaleString()} FCFA)\n`;
+            });
+            
+            message += `\nTotal: ${cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toLocaleString()} FCFA`;
+            message += "\n\nMerci!";
+            
+            const encodedMessage = encodeURIComponent(message);
+            window.open(`https://wa.me/221772952287?text=${encodedMessage}`, '_blank');
+        });
+    </script>
+</body>
+</html>
