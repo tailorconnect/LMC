@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boutique en ligne</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet">
+<script>
+tailwind.config = {
+theme: {
+extend: {
+colors: {
+primary: '#006400',
+secondary: '#90EE90'
+},
+borderRadius: {
+'none': '0px',
+'sm': '4px',
+DEFAULT: '8px',
+'md': '12px',
+'lg': '16px',
+'xl': '20px',
+'2xl': '24px',
+'3xl': '32px',
+'full': '9999px',
+'button': '8px'
+}
+}
+}
+}
+</script>
+<style>
+:where([class^="ri-"])::before { content: "\f3c2"; }
+.product-grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+gap: 2rem;
+}
+.hover-card {
+transition: all 0.3s ease;
+}
+.hover-card:hover {
+transform: translateY(-4px);
+box-shadow: 0 10px 20px rgba(0, 100, 0, 0.1);
+}
+.cart-modal {
+position: fixed;
+top: 0;
+right: -100%;
+width: 100%;
+max-width: 400px;
+height: 100vh;
+background: white;
+box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+transition: right 0.3s ease;
+z-index: 1000;
+}
+.cart-modal.active {
+right: 0;
+}
+.cart-backdrop {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0,0,0,0.5);
+opacity: 0;
+visibility: hidden;
+transition: all 0.3s ease;
+z-index: 999;
+}
+.cart-backdrop.active {
+opacity: 1;
+visibility: visible;
+}
+</style>
+</head>
+<body class="min-h-screen bg-white">
+<header class="bg-gradient-to-b from-primary to-secondary">
+<nav class="container mx-auto px-6 py-4">
+<div class="flex items-center justify-between">
+<a href="#" class="text-white font-['Poppins'] text-3xl">LMC</a>
+<div class="flex items-center space-x-4">
+<button id="cartButton" class="w-10 h-10 flex items-center justify-center text-white relative">
+<i class="ri-shopping-cart-line text-xl"></i>
+<span id="cartCount" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
+</button>
+</div>
+</div>
+</nav>
+</header>
+<div id="cartBackdrop" class="cart-backdrop"></div>
+<div id="cartModal" class="cart-modal p-6">
+<div class="flex justify-between items-center mb-6">
+<h2 class="text-xl font-bold text-primary">Panier</h2>
+<button id="closeCart" class="text-gray-500 hover:text-gray-700">
+<i class="ri-close-line text-2xl"></i>
+</button>
+</div>
+<div id="cartItems" class="space-y-4 mb-6"></div>
+<div class="border-t pt-4">
+<div class="flex justify-between mb-4">
+<span class="font-semibold">Total:</span>
+<span id="cartTotal" class="font-bold text-primary">0,00 €</span>
+</div>
+<button id="orderWhatsApp" class="w-full !rounded-button bg-[#25D366] text-white py-3 flex items-center justify-center space-x-2 hover:bg-[#128C7E]">
+<i class="ri-whatsapp-line text-xl"></i>
+<span>Commander via WhatsApp</span>
+</button>
+</div>
+</div>
+<main class="container mx-auto px-6 py-12">
+  <h1 class="text-4xl font-bold text-primary mb-8">Nos Produits Électroménagers</h1>
+  <div class="product-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+
+    <!-- Produit 1 : Mixeur sans fil -->
+    <div class="hover-card bg-white rounded-lg border border-secondary p-4">
+      <img src="mixeursansfil.jpg" class="w-full h-48 object-cover rounded-lg mb-4" alt="Mixeur à main sans fil DECAKILA KMMX018G">
+      <h3 class="text-xl font-semibold mb-2">Mixeur à main sans fil KMMX018G</h3>
+      <p class="text-gray-600 mb-4 text-sm">Capacité: 300 ml • Tension: 3,7 V • Batterie : 1500mAh • Puissance: 30W • 2 lames inox • USB inclus</p>
+      <div class="flex items-center justify-between">
+        <span class="text-lg font-bold text-primary">10.600 FCFA</span>
+        <button class="add-to-cart bg-[#228B22] text-white px-4 py-2 rounded hover:bg-[#2E8B57]"
+          data-name="Mixeur sans fil KMMX018G"
+          data-price="10600">
+          Ajouter au panier
+        </button>
+      </div>
+    </div>
+
+    <!-- Produit 2 : Mélangeur sans fil -->
+    <div class="hover-card bg-white rounded-lg border border-secondary p-4">
+      <img src="melangeursansfil.jpg" class="w-full h-48 object-cover rounded-lg mb-4" alt="Mélangeur à main sans fil">
+      <h3 class="text-xl font-semibold mb-2">Mélangeur à main KMMX018G</h3>
+      <p class="text-gray-600 mb-4 text-sm">25W • DC 3.7V • Batterie 1500mAh • 3 vitesses • 2 fouets • 1 bol 0,3L • USB • Boîte couleur</p>
+      <div class="flex items-center justify-between">
+        <span class="text-lg font-bold text-primary">28.000 FCFA</span>
+        <button class="add-to-cart bg-[#228B22] text-white px-4 py-2 rounded hover:bg-[#2E8B57]"
+          data-name="Mélangeur sans fil KMMX018G"
+          data-price="28000">
+          Ajouter au panier
+        </button>
+      </div>
+    </div>
+
+    <!-- Produit 3 : Mixeur portable -->
+    <div class="hover-card bg-white rounded-lg border border-secondary p-4">
+      <img src="mixeurportable.jpg" class="w-full h-48 object-cover rounded-lg mb-4" alt="Mixeur portable sans fil">
+      <h3 class="text-xl font-semibold mb-2">Mixeur portable DECAKILA KMJB035G</h3>
+      <p class="text-gray-600 mb-4 text-sm">Capacité: 300 ml • Tension: 3,7 V • Batterie: 1500mAh • 30W • 2 lames inox • USB inclus</p>
+      <div class="flex items-center justify-between">
+        <span class="text-lg font-bold text-primary">10.800 FCFA</span>
+        <button class="add-to-cart bg-[#228B22] text-white px-4 py-2 rounded hover:bg-[#2E8B57]"
+          data-name="Mixeur portable KMJB035G"
+          data-price="10800">
+          Ajouter au panier
+        </button>
+      </div>
+    </div>
+
+    <!-- Produit 4 : Cafetière filtre -->
+    <div class="hover-card bg-white rounded-lg border border-secondary p-4">
+      <img src="cafetierefiltre.jpg" class="w-full h-48 object-cover rounded-lg mb-4" alt="Cafetière filtre DECAKILA 1,8L">
+      <h3 class="text-xl font-semibold mb-2">Cafetière filtre 1,8L KECFO28B</h3>
+      <p class="text-gray-600 mb-4 text-sm">12 tasses • 900W • Anti-goutte 30s • Maintien au chaud • Arrêt automatique</p>
+      <div class="flex items-center justify-between">
+        <span class="text-lg font-bold text-primary">15.500 FCFA</span>
+        <button class="add-to-cart bg-[#228B22] text-white px-4 py-2 rounded hover:bg-[#2E8B57]"
+          data-name="Cafetière filtre KECFO28B"
+          data-price="15500">
+          Ajouter au panier
+        </button>
+      </div>
+    </div>
+
+    <!-- Produit 5 : Bouilloire inox -->
+    <div class="hover-card bg-white rounded-lg border border-secondary p-4">
+      <img src="bouilloireelectrique.jpg" class="w-full h-48 object-cover rounded-lg mb-4" alt="Bouilloire inox 1,8L">
+      <h3 class="text-xl font-semibold mb-2">Bouilloire inox 1,8L KEKT031M</h3>
+      <p class="text-gray-600 mb-4 text-sm">1.500W • Acier inoxydable • Sécurité anti-ébullition • Arrêt auto</p>
+      <div class="flex items-center justify-between">
+        <span class="text-lg font-bold text-primary">9.200 FCFA</span>
+        <button class="add-to-cart bg-[#228B22] text-white px-4 py-2 rounded hover:bg-[#2E8B57]"
+          data-name="Bouilloire inox KEKT031M"
+          data-price="9200">
+          Ajouter au panier
+        </button>
+      </div>
+    </div>
+
+    <!-- Produit 6 : Mini four -->
+    <div class="hover-card bg-white rounded-lg border border-secondary p-4">
+      <img src="minifour.jpg" class="w-full h-48 object-cover rounded-lg mb-4" alt="Mini four électrique 28L">
+      <h3 class="text-xl font-semibold mb-2">Mini four électrique KEEV010B</h3>
+      <p class="text-gray-600 mb-4 text-sm">Capacité: 28L • Cuisson rapide et efficace pour vos plats quotidiens</p>
+      <div class="flex items-center justify-between">
+        <span class="text-lg font-bold text-primary">55.500 FCFA</span>
+        <button class="add-to-cart bg-[#228B22] text-white px-4 py-2 rounded hover:bg-[#2E8B57]"
+          data-name="Mini four électrique KEEV010B"
+          data-price="55500">
+          Ajouter au panier
+        </button>
+      </div>
+    </div>
+
+  </div>
+</main>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+let cart = [];
+let cartOpen = false;
+const cartButton = document.getElementById('cartButton');
+const cartModal = document.getElementById('cartModal');
+const cartBackdrop = document.getElementById('cartBackdrop');
+const closeCart = document.getElementById('closeCart');
+const cartItems = document.getElementById('cartItems');
+const cartCount = document.getElementById('cartCount');
+const cartTotal = document.getElementById('cartTotal');
+const orderWhatsApp = document.getElementById('orderWhatsApp');
+function toggleCart() {
+cartOpen = !cartOpen;
+cartModal.classList.toggle('active');
+cartBackdrop.classList.toggle('active');
+}
+function updateCart() {
+cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+cartItems.innerHTML = '';
+cart.forEach(item => {
+const itemElement = document.createElement('div');
+itemElement.className = 'flex justify-between items-center';
+itemElement.innerHTML = `
+<div>
+<h4 class="font-semibold">${item.name}</h4>
+<p class="text-gray-600">${item.quantity} x ${item.price.toLocaleString()} FCFA</p>
+</div>
+<button class="remove-item text-red-500 hover:text-red-700" data-name="${item.name}">
+<i class="ri-delete-bin-line"></i>
+</button>
+`;
+cartItems.appendChild(itemElement);
+});
+const total = cart.reduce((sum, item) => sum + (item.quantity * item.price), 0);
+cartTotal.textContent = total.toLocaleString() + ' FCFA';
+}
+function addToCart(name, price) {
+const existingItem = cart.find(item => item.name === name);
+if (existingItem) {
+existingItem.quantity += 1;
+} else {
+cart.push({name, price: parseFloat(price), quantity: 1});
+}
+updateCart();
+}
+document.querySelectorAll('.add-to-cart').forEach(button => {
+button.addEventListener('click', () => {
+const name = button.dataset.name;
+const price = button.dataset.price;
+addToCart(name, price);
+});
+});
+cartItems.addEventListener('click', (e) => {
+if (e.target.closest('.remove-item')) {
+const name = e.target.closest('.remove-item').dataset.name;
+cart = cart.filter(item => item.name !== name);
+updateCart();
+}
+});
+cartButton.addEventListener('click', toggleCart);
+closeCart.addEventListener('click', toggleCart);
+cartBackdrop.addEventListener('click', toggleCart);
+orderWhatsApp.addEventListener('click', () => {
+const phoneNumber = '+221772952287';  // Replace with your WhatsApp number
+let message = 'Bonjour, je souhaite commander :\n\n';
+cart.forEach(item => {
+message += `${item.quantity}x ${item.name} (${item.price.toLocaleString()} FCFA)\n`;
+});
+const total = cart.reduce((sum, item) => sum + (item.quantity * item.price), 0);
+message += `\nTotal: ${total.toLocaleString()} FCFA`;
+const encodedMessage = encodeURIComponent(message);
+window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`);
+});
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boutique en ligne</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet">
+<script>
+tailwind.config = {
+theme: {
+extend: {
+colors: {
+primary: '#006400',
+secondary: '#90EE90'
+},
+borderRadius: {
+'none': '0px',
+'sm': '4px',
+DEFAULT: '8px',
+'md': '12px',
+'lg': '16px',
+'xl': '20px',
+'2xl': '24px',
+'3xl': '32px',
+'full': '9999px',
+'button': '8px'
+}
+}
+}
+}
+</script>
+<style>
+:where([class^="ri-"])::before { content: "\f3c2"; }
+.product-grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+gap: 2rem;
+}
+.hover-card {
+transition: all 0.3s ease;
+}
+.hover-card:hover {
+transform: translateY(-4px);
+box-shadow: 0 10px 20px rgba(0, 100, 0, 0.1);
+}
+.cart-modal {
+position: fixed;
+top: 0;
+right: -100%;
+width: 100%;
+max-width: 400px;
+height: 100vh;
+background: white;
+box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+transition: right 0.3s ease;
+z-index: 1000;
+}
+.cart-modal.active {
+right: 0;
+}
+.cart-backdrop {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0,0,0,0.5);
+opacity: 0;
+visibility: hidden;
+transition: all 0.3s ease;
+z-index: 999;
+}
+.cart-backdrop.active {
+opacity: 1;
+visibility: visible;
+}
+</style>
+</head>
+<body class="min-h-screen bg-white">
+<header class="bg-gradient-to-b from-primary to-secondary">
+<nav class="container mx-auto px-6 py-4">
+<div class="flex items-center justify-between">
+<a href="#" class="text-white font-['Poppins'] text-3xl">LMC</a>
+<div class="flex items-center space-x-4">
+<button id="cartButton" class="w-10 h-10 flex items-center justify-center text-white relative">
+<i class="ri-shopping-cart-line text-xl"></i>
+<span id="cartCount" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
+</button>
+</div>
+</div>
+</nav>
+</header>
+<div id="cartBackdrop" class="cart-backdrop"></div>
+<div id="cartModal" class="cart-modal p-6">
+<div class="flex justify-between items-center mb-6">
+<h2 class="text-xl font-bold text-primary">Panier</h2>
+<button id="closeCart" class="text-gray-500 hover:text-gray-700">
+<i class="ri-close-line text-2xl"></i>
+</button>
+</div>
+<div id="cartItems" class="space-y-4 mb-6"></div>
+<div class="border-t pt-4">
+<div class="flex justify-between mb-4">
+<span class="font-semibold">Total:</span>
+<span id="cartTotal" class="font-bold text-primary">0,00 €</span>
+</div>
+<button id="orderWhatsApp" class="w-full !rounded-button bg-[#25D366] text-white py-3 flex items-center justify-center space-x-2 hover:bg-[#128C7E]">
+<i class="ri-whatsapp-line text-xl"></i>
+<span>Commander via WhatsApp</span>
+</button>
+</div>
+</div>
+<main class="container mx-auto px-6 py-12">
+  <h1 class="text-4xl font-bold text-primary mb-8">Nos Produits de Beauté MAYANA</h1>
+  <div class="product-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+
+    <!-- Produit 1 -->
+    <div class="hover-card bg-white rounded-lg border border-secondary p-4">
+      <img src="serumantitaches.jpg" class="w-full h-48 object-cover rounded-lg mb-4" alt="Sérum anti-tâches MAYANA">
+      <h3 class="text-xl font-semibold mb-2">Sérum anti-tâches MAYANA</h3>
+      <p class="text-gray-600 mb-4 text-sm">Corrige les tâches et unifie le teint</p>
+      <div class="flex items-center justify-between">
+        <span class="text-lg font-bold text-primary">6.000 FCFA</span>
+        <button class="add-to-cart bg-[#228B22] text-white px-4 py-2 rounded hover:bg-[#2E8B57]"
+          data-name="Sérum anti-tâches MAYANA"
+          data-price="6000">Ajouter au panier</button>
+      </div>
+    </div>
+
+    <!-- Produit 2 -->
+    <div class="hover-card bg-white rounded-lg border border-secondary p-4">
+      <img src="savonantiacne.jpg" class="w-full h-48 object-cover rounded-lg mb-4" alt="Savon anti acné MAYANA">
+      <h3 class="text-xl font-semibold mb-2">Savon anti acné MAYANA</h3>
+      <p class="text-gray-600 mb-4 text-sm">Purifie et traite les imperfections</p>
+      <div class="flex items-center justify-between">
+        <span class="text-lg font-bold text-primary">2.000 FCFA</span>
+        <button class="add-to-cart bg-[#228B22] text-white px-4 py-2 rounded hover:bg-[#2E8B57]"
+          data-name="Savon anti acné MAYANA"
+          data-price="2000">Ajouter au panier</button>
+      </div>
+    </div>
+
+    <!-- Produit 3 -->
+    <div class="hover-card bg-white rounded-lg border border-secondary p-4">
+      <img src="savonkarite.jpg" class="w-full h-48 object-cover rounded-lg mb-4" alt="Savon karité MAYANA">
+      <h3 class="text-xl font-semibold mb-2">Savon karité MAYANA</h3>
+      <p class="text-gray-600 mb-4 text-sm">Hydrate et nourrit la peau naturellement</p>
+      <div class="flex items-center justify-between">
+        <span class="text-lg font-bold text-primary">2.000 FCFA</span>
+        <button class="add-to-cart bg-[#228B22] text-white px-4 py-2 rounded hover:bg-[#2E8B57]"
+          data-name="Savon karité MAYANA"
+          data-price="2000">Ajouter au panier</button>
+      </div>
+    </div>
+
+    <!-- Produit 4 -->
+    <div class="hover-card bg-white rounded-lg border border-secondary p-4">
+      <img src="cremegommante.jpg" class="w-full h-48 object-cover rounded-lg mb-4" alt="Crème gommante MAYANA">
+      <h3 class="text-xl font-semibold mb-2">Crème gommante MAYANA</h3>
+      <p class="text-gray-600 mb-4 text-sm">Exfolie en douceur visage et corps</p>
+      <div class="flex items-center justify-between">
+        <span class="text-lg font-bold text-primary">6.000 FCFA</span>
+        <button class="add-to-cart bg-[#228B22] text-white px-4 py-2 rounded hover:bg-[#2E8B57]"
+          data-name="Crème gommante MAYANA"
+          data-price="6000">Ajouter au panier</button>
+      </div>
+    </div>
+
+    <!-- Produit 5 -->
+    <div class="hover-card bg-white rounded-lg border border-secondary p-4">
+      <img src="parfum124.jpg" class="w-full h-48 object-cover rounded-lg mb-4" alt="Parfum 124 MAYANA">
+      <h3 class="text-xl font-semibold mb-2">Parfum 124 Arabians Tonka.M</h3>
+      <p class="text-gray-600 mb-4 text-sm">Élégant, intense et raffiné</p>
+      <div class="flex items-center justify-between">
+        <span class="text-lg font-bold text-primary">8.000 FCFA</span>
+        <button class="add-to-cart bg-[#228B22] text-white px-4 py-2 rounded hover:bg-[#2E8B57]"
+          data-name="Parfum 124"
+          data-price="8000">Ajouter au panier</button>
+      </div>
+    </div>
+
+    <!-- Produit 6 -->
+    <div class="hover-card bg-white rounded-lg border border-secondary p-4">
+      <img src="parfum100.jpg" class="w-full h-48 object-cover rounded-lg mb-4" alt="Parfum 100 J'adore .D">
+      <h3 class="text-xl font-semibold mb-2">Parfum 100 - J'adore .D</h3>
+      <p class="text-gray-600 mb-4 text-sm">Féminin, doux et floral</p>
+      <div class="flex items-center justify-between">
+        <span class="text-lg font-bold text-primary">8.000 FCFA</span>
+        <button class="add-to-cart bg-[#228B22] text-white px-4 py-2 rounded hover:bg-[#2E8B57]"
+          data-name="Parfum 100"
+          data-price="8000">Ajouter au panier</button>
+      </div>
+    </div>
+
+    <!-- Produit 7 -->
+    <div class="hover-card bg-white rounded-lg border border-secondary p-4">
+      <img src="parfum102.jpg" class="w-full h-48 object-cover rounded-lg mb-4" alt="Parfum 102 La vie est Belle .L">
+      <h3 class="text-xl font-semibold mb-2">Parfum 102 - La vie est Belle .L</h3>
+      <p class="text-gray-600 mb-4 text-sm">Chic, sucré et captivant</p>
+      <div class="flex items-center justify-between">
+        <span class="text-lg font-bold text-primary">8.000 FCFA</span>
+        <button class="add-to-cart bg-[#228B22] text-white px-4 py-2 rounded hover:bg-[#2E8B57]"
+          data-name="Parfum 102"
+          data-price="8000">Ajouter au panier</button>
+      </div>
+    </div>
+
+    <!-- Produit 8 -->
+    <div class="hover-card bg-white rounded-lg border border-secondary p-4">
+      <img src="savonaloevera.jpg" class="w-full h-48 object-cover rounded-lg mb-4" alt="Savon Aloe Vera">
+      <h3 class="text-xl font-semibold mb-2">Savon Aloe Vera</h3>
+      <p class="text-gray-600 mb-4 text-sm">Apaise et régénère la peau naturellement</p>
+      <div class="flex items-center justify-between">
+        <span class="text-lg font-bold text-primary">2.000 FCFA</span>
+        <button class="add-to-cart bg-[#228B22] text-white px-4 py-2 rounded hover:bg-[#2E8B57]"
+          data-name="Savon Aloe Vera"
+          data-price="2000">Ajouter au panier</button>
+      </div>
+    </div>
+
+    <!-- Produit 9 -->
+    <div class="hover-card bg-white rounded-lg border border-secondary p-4">
+      <img src="geldouchegommant.jpg" class="w-full h-48 object-cover rounded-lg mb-4" alt="Gel douche gommant">
+      <h3 class="text-xl font-semibold mb-2">Gel douche gommant</h3>
+      <p class="text-gray-600 mb-4 text-sm">Nettoie et exfolie en douceur</p>
+      <div class="flex items-center justify-between">
+        <span class="text-lg font-bold text-primary">5.000 FCFA</span>
+        <button class="add-to-cart bg-[#228B22] text-white px-4 py-2 rounded hover:bg-[#2E8B57]"
+          data-name="Gel douche gommant"
+          data-price="5000">Ajouter au panier</button>
+      </div>
+    </div>
+
+    <!-- Produit 10 -->
+    <div class="hover-card bg-white rounded-lg border border-secondary p-4">
+      <img src="parfummeddyoud.jpg" class="w-full h-48 object-cover rounded-lg mb-4" alt="Parfum MEDDY OUD">
+      <h3 class="text-xl font-semibold mb-2">Parfum MEDDY OUD</h3>
+      <p class="text-gray-600 mb-4 text-sm">Création privée, note orientale et boisée</p>
+      <div class="flex items-center justify-between">
+        <span class="text-lg font-bold text-primary">8.000 FCFA</span>
+        <button class="add-to-cart bg-[#228B22] text-white px-4 py-2 rounded hover:bg-[#2E8B57]"
+          data-name="Parfum MEDDY OUD"
+          data-price="8000">Ajouter au panier</button>
+      </div>
+    </div>
+
+    <!-- Produit 11 -->
+    <div class="hover-card bg-white rounded-lg border border-secondary p-4">
+      <img src="huilenourissante.jpg" class="w-full h-48 object-cover rounded-lg mb-4" alt="Huile nourrissante">
+      <h3 class="text-xl font-semibold mb-2">Huile nourrissante</h3>
+      <p class="text-gray-600 mb-4 text-sm">Pour une peau douce et éclatante</p>
+      <div class="flex items-center justify-between">
+        <span class="text-lg font-bold text-primary">4.000 FCFA</span>
+        <button class="add-to-cart bg-[#228B22] text-white px-4 py-2 rounded hover:bg-[#2E8B57]"
+          data-name="Huile nourrissante"
+          data-price="4000">Ajouter au panier</button>
+      </div>
+    </div>
+
+    <!-- Produit 12 -->
+    <div class="hover-card bg-white rounded-lg border border-secondary p-4">
+      <img src="parfum112.jpg" class="w-full h-48 object-cover rounded-lg mb-4" alt="Parfum 112 - Scandal">
+      <h3 class="text-xl font-semibold mb-2">Parfum 112 - Scandal</h3>
+      <p class="text-gray-600 mb-4 text-sm">Audacieux, sucré et affirmé</p>
+      <div class="flex items-center justify-between">
+        <span class="text-lg font-bold text-primary">8.000 FCFA</span>
+        <button class="add-to-cart bg-[#228B22] text-white px-4 py-2 rounded hover:bg-[#2E8B57]"
+          data-name="Parfum 112"
+          data-price="8000">Ajouter au panier</button>
+      </div>
+    </div>
+
+  </div>
+</main>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+let cart = [];
+let cartOpen = false;
+const cartButton = document.getElementById('cartButton');
+const cartModal = document.getElementById('cartModal');
+const cartBackdrop = document.getElementById('cartBackdrop');
+const closeCart = document.getElementById('closeCart');
+const cartItems = document.getElementById('cartItems');
+const cartCount = document.getElementById('cartCount');
+const cartTotal = document.getElementById('cartTotal');
+const orderWhatsApp = document.getElementById('orderWhatsApp');
+function toggleCart() {
+cartOpen = !cartOpen;
+cartModal.classList.toggle('active');
+cartBackdrop.classList.toggle('active');
+}
+function updateCart() {
+cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+cartItems.innerHTML = '';
+cart.forEach(item => {
+const itemElement = document.createElement('div');
+itemElement.className = 'flex justify-between items-center';
+itemElement.innerHTML = `
+<div>
+<h4 class="font-semibold">${item.name}</h4>
+<p class="text-gray-600">${item.quantity} x ${item.price.toLocaleString()} FCFA</p>
+</div>
+<button class="remove-item text-red-500 hover:text-red-700" data-name="${item.name}">
+<i class="ri-delete-bin-line"></i>
+</button>
+`;
+cartItems.appendChild(itemElement);
+});
+const total = cart.reduce((sum, item) => sum + (item.quantity * item.price), 0);
+cartTotal.textContent = total.toLocaleString() + ' FCFA';
+}
+function addToCart(name, price) {
+const existingItem = cart.find(item => item.name === name);
+if (existingItem) {
+existingItem.quantity += 1;
+} else {
+cart.push({name, price: parseFloat(price), quantity: 1});
+}
+updateCart();
+}
+document.querySelectorAll('.add-to-cart').forEach(button => {
+button.addEventListener('click', () => {
+const name = button.dataset.name;
+const price = button.dataset.price;
+addToCart(name, price);
+});
+});
+cartItems.addEventListener('click', (e) => {
+if (e.target.closest('.remove-item')) {
+const name = e.target.closest('.remove-item').dataset.name;
+cart = cart.filter(item => item.name !== name);
+updateCart();
+}
+});
+cartButton.addEventListener('click', toggleCart);
+closeCart.addEventListener('click', toggleCart);
+cartBackdrop.addEventListener('click', toggleCart);
+orderWhatsApp.addEventListener('click', () => {
+const phoneNumber = '+221772952287';  // Replace with your WhatsApp number
+let message = 'Bonjour, je souhaite commander :\n\n';
+cart.forEach(item => {
+message += `${item.quantity}x ${item.name} (${item.price.toLocaleString()} FCFA)\n`;
+});
+const total = cart.reduce((sum, item) => sum + (item.quantity * item.price), 0);
+message += `\nTotal: ${total.toLocaleString()} FCFA`;
+const encodedMessage = encodeURIComponent(message);
+window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`);
+});
+});
+</script>
+</body>
+</html>

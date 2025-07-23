@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boutique en ligne</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet">
+<script>
+tailwind.config = {
+theme: {
+extend: {
+colors: {
+primary: '#006400',
+secondary: '#90EE90'
+},
+borderRadius: {
+'none': '0px',
+'sm': '4px',
+DEFAULT: '8px',
+'md': '12px',
+'lg': '16px',
+'xl': '20px',
+'2xl': '24px',
+'3xl': '32px',
+'full': '9999px',
+'button': '8px'
+}
+}
+}
+}
+</script>
+<style>
+:where([class^="ri-"])::before { content: "\f3c2"; }
+.product-grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+gap: 2rem;
+}
+.hover-card {
+transition: all 0.3s ease;
+}
+.hover-card:hover {
+transform: translateY(-4px);
+box-shadow: 0 10px 20px rgba(0, 100, 0, 0.1);
+}
+.cart-modal {
+position: fixed;
+top: 0;
+right: -100%;
+width: 100%;
+max-width: 400px;
+height: 100vh;
+background: white;
+box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+transition: right 0.3s ease;
+z-index: 1000;
+}
+.cart-modal.active {
+right: 0;
+}
+.cart-backdrop {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0,0,0,0.5);
+opacity: 0;
+visibility: hidden;
+transition: all 0.3s ease;
+z-index: 999;
+}
+.cart-backdrop.active {
+opacity: 1;
+visibility: visible;
+}
+</style>
+</head>
+<body class="min-h-screen bg-white">
+<header class="bg-gradient-to-b from-primary to-secondary">
+<nav class="container mx-auto px-6 py-4">
+<div class="flex items-center justify-between">
+<a href="#" class="text-white font-['Poppins'] text-3xl">LMC</a>
+<div class="flex items-center space-x-4">
+<button id="cartButton" class="w-10 h-10 flex items-center justify-center text-white relative">
+<i class="ri-shopping-cart-line text-xl"></i>
+<span id="cartCount" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
+</button>
+</div>
+</div>
+</nav>
+</header>
+<div id="cartBackdrop" class="cart-backdrop"></div>
+<div id="cartModal" class="cart-modal p-6">
+<div class="flex justify-between items-center mb-6">
+<h2 class="text-xl font-bold text-primary">Panier</h2>
+<button id="closeCart" class="text-gray-500 hover:text-gray-700">
+<i class="ri-close-line text-2xl"></i>
+</button>
+</div>
+<div id="cartItems" class="space-y-4 mb-6"></div>
+<div class="border-t pt-4">
+<div class="flex justify-between mb-4">
+<span class="font-semibold">Total:</span>
+<span id="cartTotal" class="font-bold text-primary">0,00 €</span>
+</div>
+<button id="orderWhatsApp" class="w-full !rounded-button bg-[#25D366] text-white py-3 flex items-center justify-center space-x-2 hover:bg-[#128C7E]">
+<i class="ri-whatsapp-line text-xl"></i>
+<span>Commander via WhatsApp</span>
+</button>
+</div>
+</div>
+<main class="container mx-auto px-6 py-12">
+  <h1 class="text-4xl font-bold text-primary mb-8">Nos Articles de Mode</h1>
+  <div class="product-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+    
+    <!-- Produit 1 -->
+    <div class="hover-card bg-white rounded-lg border border-secondary p-4">
+      <img src="kouassi.jpg" class="w-full h-48 object-cover rounded-lg mb-4" alt="Kouassi Maison Kalsoum">
+      <h3 class="text-xl font-semibold mb-2">Kouassi Maison Kalsoum</h3>
+      <p class="text-gray-600 mb-4">Tenue élégante de qualité supérieure</p>
+      <div class="flex items-center justify-between">
+        <span class="text-lg font-bold text-primary">40.000 FCFA</span>
+        <button class="add-to-cart !rounded-button bg-[#228B22] text-white px-4 py-2 hover:bg-[#2E8B57]"
+          data-name="Kouassi Maison Kalsoum"
+          data-price="40000">
+          Ajouter au panier
+        </button>
+      </div>
+    </div>
+
+    <!-- Produit 2 -->
+    <div class="hover-card bg-white rounded-lg border border-secondary p-4">
+      <img src="oumaisha.jpg" class="w-full h-48 object-cover rounded-lg mb-4" alt="Oumaisha Maison Kalsoum">
+      <h3 class="text-xl font-semibold mb-2">Oumaisha Maison Kalsoum</h3>
+      <p class="text-gray-600 mb-4">Tissu léger et stylé pour toutes occasions</p>
+      <div class="flex items-center justify-between">
+        <span class="text-lg font-bold text-primary">22.500 FCFA</span>
+        <button class="add-to-cart !rounded-button bg-[#228B22] text-white px-4 py-2 hover:bg-[#2E8B57]"
+          data-name="Oumaisha Maison Kalsoum"
+          data-price="22500">
+          Ajouter au panier
+        </button>
+      </div>
+    </div>
+
+    <!-- Produit 3 -->
+    <div class="hover-card bg-white rounded-lg border border-secondary p-4">
+      <img src="adire.jpg" class="w-full h-48 object-cover rounded-lg mb-4" alt="Adire Maison Kalsoum">
+      <h3 class="text-xl font-semibold mb-2">Adire Maison Kalsoum</h3>
+      <p class="text-gray-600 mb-4">Style traditionnel revisité avec élégance</p>
+      <div class="flex items-center justify-between">
+        <span class="text-lg font-bold text-primary">15.000 FCFA</span>
+        <button class="add-to-cart !rounded-button bg-[#228B22] text-white px-4 py-2 hover:bg-[#2E8B57]"
+          data-name="Adire Maison Kalsoum"
+          data-price="15000">
+          Ajouter au panier
+        </button>
+      </div>
+    </div>
+
+    <!-- Produit 4 -->
+    <div class="hover-card bg-white rounded-lg border border-secondary p-4">
+      <img src="yasmina.jpg" class="w-full h-48 object-cover rounded-lg mb-4" alt="Yasmina Maison Kalsoum">
+      <h3 class="text-xl font-semibold mb-2">Yasmina Maison Kalsoum</h3>
+      <p class="text-gray-600 mb-4">Raffinement et modernité réunis</p>
+      <div class="flex items-center justify-between">
+        <span class="text-lg font-bold text-primary">35.000 FCFA</span>
+        <button class="add-to-cart !rounded-button bg-[#228B22] text-white px-4 py-2 hover:bg-[#2E8B57]"
+          data-name="Yasmina Maison Kalsoum"
+          data-price="35000">
+          Ajouter au panier
+        </button>
+      </div>
+    </div>
+
+    <!-- Produit 5 -->
+    <div class="hover-card bg-white rounded-lg border border-secondary p-4">
+      <img src="costume2pc.jpg" class="w-full h-48 object-cover rounded-lg mb-4" alt="Costume 2 pièces hommes">
+      <h3 class="text-xl font-semibold mb-2">Costume 2 pièces hommes</h3>
+      <p class="text-gray-600 mb-4">Pour un look professionnel et élégant</p>
+      <div class="flex items-center justify-between">
+        <span class="text-lg font-bold text-primary">80.000 FCFA</span>
+        <button class="add-to-cart !rounded-button bg-[#228B22] text-white px-4 py-2 hover:bg-[#2E8B57]"
+          data-name="Costume 2 pièces hommes"
+          data-price="80000">
+          Ajouter au panier
+        </button>
+      </div>
+    </div>
+
+    <!-- Produit 6 -->
+    <div class="hover-card bg-white rounded-lg border border-secondary p-4">
+      <img src="chemiseverte.jpg" class="w-full h-48 object-cover rounded-lg mb-4" alt="Chemise verte Saloum Shop">
+      <h3 class="text-xl font-semibold mb-2">Chemise verte Saloum Shop</h3>
+      <p class="text-gray-600 mb-4">Coupe moderne, tissu respirant</p>
+      <div class="flex items-center justify-between">
+        <span class="text-lg font-bold text-primary">15.000 FCFA</span>
+        <button class="add-to-cart !rounded-button bg-[#228B22] text-white px-4 py-2 hover:bg-[#2E8B57]"
+          data-name="Chemise verte Saloum Shop"
+          data-price="15000">
+          Ajouter au panier
+        </button>
+      </div>
+    </div>
+
+    <!-- Produit 7 -->
+    <div class="hover-card bg-white rounded-lg border border-secondary p-4">
+      <img src="chemiseblanche.jpg" class="w-full h-48 object-cover rounded-lg mb-4" alt="Chemise blanche Saloum Shop">
+      <h3 class="text-xl font-semibold mb-2">Chemise blanche Saloum Shop</h3>
+      <p class="text-gray-600 mb-4">Indispensable dans toute garde-robe</p>
+      <div class="flex items-center justify-between">
+        <span class="text-lg font-bold text-primary">15.000 FCFA</span>
+        <button class="add-to-cart !rounded-button bg-[#228B22] text-white px-4 py-2 hover:bg-[#2E8B57]"
+          data-name="Chemise blanche Saloum Shop"
+          data-price="15000">
+          Ajouter au panier
+        </button>
+      </div>
+    </div>
+
+    <!-- Produit 8 -->
+    <div class="hover-card bg-white rounded-lg border border-secondary p-4">
+      <img src="tshirtblanc.jpg" class="w-full h-48 object-cover rounded-lg mb-4" alt="T-shirt blanc unique coton">
+      <h3 class="text-xl font-semibold mb-2">T-shirt blanc coton</h3>
+      <p class="text-gray-600 mb-4">Confort et simplicité au quotidien</p>
+      <div class="flex items-center justify-between">
+        <span class="text-lg font-bold text-primary">5.000 FCFA</span>
+        <button class="add-to-cart !rounded-button bg-[#228B22] text-white px-4 py-2 hover:bg-[#2E8B57]"
+          data-name="T-shirt blanc coton"
+          data-price="5000">
+          Ajouter au panier
+        </button>
+      </div>
+    </div>
+
+    <!-- Produit 9 -->
+    <div class="hover-card bg-white rounded-lg border border-secondary p-4">
+      <img src="tshirtnoir.jpg" class="w-full h-48 object-cover rounded-lg mb-4" alt="T-shirt noir unique coton">
+      <h3 class="text-xl font-semibold mb-2">T-shirt noir coton</h3>
+      <p class="text-gray-600 mb-4">Look sobre et passe-partout</p>
+      <div class="flex items-center justify-between">
+        <span class="text-lg font-bold text-primary">5.000 FCFA</span>
+        <button class="add-to-cart !rounded-button bg-[#228B22] text-white px-4 py-2 hover:bg-[#2E8B57]"
+          data-name="T-shirt noir coton"
+          data-price="5000">
+          Ajouter au panier
+        </button>
+      </div>
+    </div>
+
+  </div>
+</main>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+let cart = [];
+let cartOpen = false;
+const cartButton = document.getElementById('cartButton');
+const cartModal = document.getElementById('cartModal');
+const cartBackdrop = document.getElementById('cartBackdrop');
+const closeCart = document.getElementById('closeCart');
+const cartItems = document.getElementById('cartItems');
+const cartCount = document.getElementById('cartCount');
+const cartTotal = document.getElementById('cartTotal');
+const orderWhatsApp = document.getElementById('orderWhatsApp');
+function toggleCart() {
+cartOpen = !cartOpen;
+cartModal.classList.toggle('active');
+cartBackdrop.classList.toggle('active');
+}
+function updateCart() {
+cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+cartItems.innerHTML = '';
+cart.forEach(item => {
+const itemElement = document.createElement('div');
+itemElement.className = 'flex justify-between items-center';
+itemElement.innerHTML = `
+<div>
+<h4 class="font-semibold">${item.name}</h4>
+<p class="text-gray-600">${item.quantity} x ${item.price.toLocaleString()} FCFA</p>
+</div>
+<button class="remove-item text-red-500 hover:text-red-700" data-name="${item.name}">
+<i class="ri-delete-bin-line"></i>
+</button>
+`;
+cartItems.appendChild(itemElement);
+});
+const total = cart.reduce((sum, item) => sum + (item.quantity * item.price), 0);
+cartTotal.textContent = total.toLocaleString() + ' FCFA';
+}
+function addToCart(name, price) {
+const existingItem = cart.find(item => item.name === name);
+if (existingItem) {
+existingItem.quantity += 1;
+} else {
+cart.push({name, price: parseFloat(price), quantity: 1});
+}
+updateCart();
+}
+document.querySelectorAll('.add-to-cart').forEach(button => {
+button.addEventListener('click', () => {
+const name = button.dataset.name;
+const price = button.dataset.price;
+addToCart(name, price);
+});
+});
+cartItems.addEventListener('click', (e) => {
+if (e.target.closest('.remove-item')) {
+const name = e.target.closest('.remove-item').dataset.name;
+cart = cart.filter(item => item.name !== name);
+updateCart();
+}
+});
+cartButton.addEventListener('click', toggleCart);
+closeCart.addEventListener('click', toggleCart);
+cartBackdrop.addEventListener('click', toggleCart);
+orderWhatsApp.addEventListener('click', () => {
+const phoneNumber = '+221772952287';  // Replace with your WhatsApp number
+let message = 'Bonjour, je souhaite commander :\n\n';
+cart.forEach(item => {
+message += `${item.quantity}x ${item.name} (${item.price.toLocaleString()} FCFA)\n`;
+});
+const total = cart.reduce((sum, item) => sum + (item.quantity * item.price), 0);
+message += `\nTotal: ${total.toLocaleString()} FCFA`;
+const encodedMessage = encodeURIComponent(message);
+window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`);
+});
+});
+</script>
+</body>
+</html>
